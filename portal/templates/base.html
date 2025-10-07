@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %} University Portal {% endblock %}</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  </head>
+  <body class="bg-gray-50 text-gray-900">
+    <nav>
+      <h1 class="font-bold text-xl mr-4 shadow-gray-500/50">University Portal</h1>
+      <div>
+        {% if user.is_authenticated %}
+        <span class="mr-4">Hello, {{ user.username }}</span>
+        <a href="{% url 'logout' %}" class="underline">Logout</a>
+        {% else %}
+        <a href="{% url 'login' %}" class="underline mr-4 shadow-xl shadow-gray-500/50 decoration-dashed mb-3 inline-block">Login</a>
+        {% endif %}
+      </div>
+    </nav>
+
+    <div>{% block content %} {% endblock %}</div>
+  </body>
+</html>

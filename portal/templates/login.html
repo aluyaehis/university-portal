@@ -1,0 +1,10 @@
+{% extends 'base.html' %} {% load static %} {% block title %} Login {%endblock%} {% block content %}
+<div class="bg-gray-200 py-8"> <div class="container mx-auto"> <h2 class="text-2xl font-bold mb-6 text-center">Login</h2>
+        <form method="post" class="mx-auto max-w-sm">
+            {% csrf_token %} {{form.as_p}}
+            <button class="bg-blue-700 text-white px-4 py-2 rounded mt-4 flex mx-auto">
+                Login
+            </button>
+        </form>
+    </div>
+</div>{% endblock %}
