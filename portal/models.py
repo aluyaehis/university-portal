@@ -96,7 +96,7 @@ class Grade(models.Model):
 class Announcement(models.Model):
     title = models.CharField(max_length=200)
     content = models.TextField()
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    date_created = models.ForeignKey(User, on_delete=models.CASCADE)
     target_role = models.CharField(
         max_length=20,
         choices=[('student', 'Student'), ('teacher', 'Teacher'), ('all', 'All')],

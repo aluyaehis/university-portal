@@ -1,5 +1,108 @@
-{% extends 'base.html' %} {% load static %} {% block title %} Lecturer Dashboard
-{% endblock %} {% block content %}
-<h2 class="text-2xl font-bold mb-4">Lecturer Dashboard</h2>
-<p>Welcome, {{user.username}}😊</p>
+{% extends 'base.html' %}
+{% block title %}Lecturer Dashboard{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto py-8">
+  <!-- Header -->
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-800 mb-2">
+      Welcome, {{ user.first_name|default:user.username }} 👨‍🏫
+    </h1>
+    <p class="text-gray-600">Here’s an overview of your teaching activities.</p>
+  </div>
+
+  <!-- Grid Layout -->
+  <div class="grid md:grid-cols-2 gap-6 mb-10">
+
+    <!-- My Courses -->
+    <div class="bg-white shadow-lg rounded-2xl p-6 border border-gray-100">
+      <h2 class="text-xl font-semibold mb-4 flex items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-600 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5zm0 0v6m0-6l-9-5 9-5" />
+        </svg>
+        My Courses
+      </h2>
+
+      {% if courses %}
+        <ul class="divide-y divide-gray-200">
+          {% for course in courses %}
+          <li class="py-3">
+            <h3 class="text-gray-800 font-medium">{{ course.code }} — {{ course.title }}</h3>
+            <p class="text-sm text-gray-500">Department: {{ course.department.name }}</p>
+            <p class="text-xs text-gray-400">Unit: {{ course.unit }}</p>
+          </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="text-gray-500">You haven’t been assigned any courses yet.</p>
+      {% endif %}
+    </div>
+
+    <!-- Announcements -->
+    <div class="bg-white shadow-lg rounded-2xl p-6 border border-gray-100">
+      <h2 class="text-xl font-semibold mb-4 flex items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6 1a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        Latest Announcements
+      </h2>
+      {% if announcements %}
+        <ul class="divide-y divide-gray-200">
+          {% for ann in announcements %}
+          <li class="py-3">
+            <div class="flex justify-between items-center">
+              <h3 class="text-gray-800 font-semibold">{{ ann.title }}</h3>
+              <span class="text-xs text-gray-400">{{ ann.date_created|date:"M d, Y" }}</span>
+            </div>
+            <p class="text-gray-600 mt-1">{{ ann.content|truncatechars:150 }}</p>
+            <p class="text-xs text-gray-500 mt-1">By: {{ ann.created_by.username|title }}</p>
+          </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="text-gray-500">No announcements right now.</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Students Enrolled Table -->
+  <div class="bg-white shadow-lg rounded-2xl p-6 border border-gray-100">
+    <h2 class="text-xl font-semibold mb-4 flex items-center">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-purple-600 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2h5" />
+        <circle cx="12" cy="7" r="4" />
+      </svg>
+      Students Enrolled
+    </h2>
+
+    {% if students %}
+      <div class="overflow-x-auto">
+        <table class="min-w-full table-auto border border-gray-200 text-sm text-left">
+          <thead class="bg-gray-100">
+            <tr>
+              <th class="px-4 py-2 border-b">Student</th>
+              <th class="px-4 py-2 border-b">Matric No</th>
+              <th class="px-4 py-2 border-b">Course</th>
+              <th class="px-4 py-2 border-b">Semester</th>
+              <th class="px-4 py-2 border-b">Session</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for e in students %}
+            <tr class="hover:bg-gray-50">
+              <td class="px-4 py-2 border-b">{{ e.student.username|title }}</td>
+              <td class="px-4 py-2 border-b">{{ e.student.matric_no|default:"—" }}</td>
+              <td class="px-4 py-2 border-b">{{ e.course.code }}</td>
+              <td class="px-4 py-2 border-b">{{ e.semester|title }}</td>
+              <td class="px-4 py-2 border-b">{{ e.session }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <p class="text-gray-500">No students have enrolled in your courses yet.</p>
+    {% endif %}
+  </div>
+</div>
 {% endblock %}

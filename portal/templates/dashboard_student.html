@@ -1,5 +1,76 @@
-{% extends 'base.html' %} {% load static %} {% block title %} Student Dashboard
-{% endblock %} {% block content %}
-<h2 class="text-2xl font-bold mb-4">Student Dashboard</h2>
-<p>Welcome, {{user.username}}😊</p>
+{% extends 'base.html' %} {% block title %}Student Dashboard{% endblock %} {% block content %}
+<div class="max-w-5xl mx-auto py-8">
+  <!-- Welcome Section -->
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-800 mb-2">
+      Welcome, {{ user.first_name|default:user.username }} 🎓
+    </h1>
+    <p class="text-gray-600">
+      Here’s what’s happening this week on your portal.
+    </p>
+  </div>
+
+  <!-- Enrollment Summary -->
+  <div class="grid md:grid-cols-2 gap-6 mb-10">
+    <div class="bg-white shadow-lg rounded-2xl p-6 border border-gray-100">
+      <h2 class="text-xl font-semibold mb-4">Your Courses</h2>
+      {% if enrollments %}
+      <ul class="divide-y divide-gray-200">
+        {% for e in enrollments %}
+        <li class="py-2">
+          <span class="font-medium text-gray-800">{{ e.course.code }}</span> —
+          {{ e.course.title }}
+          <p class="text-sm text-gray-500">
+            Semester: {{ e.semester|title }}, Session: {{ e.session }}
+          </p>
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p class="text-gray-500">You are not enrolled in any courses yet.</p>
+      {% endif %}
+    </div>
+
+    <!-- Announcements -->
+    <div class="bg-white shadow-lg rounded-2xl p-6 border border-gray-100">
+      <h2 class="text-xl font-semibold mb-4 flex items-center">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5 text-blue-600 mr-2"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 8v4l3 3m6 1a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
+        Latest Announcements
+      </h2>
+      {% if announcements %}
+      <ul class="divide-y divide-gray-200">
+        {% for ann in announcements %}
+        <li class="py-3">
+          <div class="flex justify-between items-center">
+            <h3 class="text-gray-800 font-semibold">{{ ann.title }}</h3>
+            <span class="text-xs text-gray-400"
+              >{{ ann.date_created|date:"M d, Y" }}</span
+            >
+          </div>
+          <p class="text-gray-600 mt-1">{{ ann.content|truncatechars:150 }}</p>
+          <p class="text-xs text-gray-500 mt-1">
+            By: {{ ann.created_by.username|title }}
+          </p>
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p class="text-gray-500">No announcements right now.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
 {% endblock %}
